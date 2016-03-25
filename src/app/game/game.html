@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="jumbotron text-center">
+    <h1>Game</h1>
+    <p class="lead">
+      Lets go
+    </p>
+    <button class="btns btn-primary" ng-click="lastRoll = game.roll()">Roll</button>
+    {{lastRoll}}
+  </div>
+  <div class="col-xs-12">
+    <h3>Players</h3>
+    <div ng-repeat="(key, player) in game.getPlayers()" class="player__card">
+      <div class="player__card__avatar"></div>
+      <div class="player__card__name">
+        <strong ng-bind="player.name"></strong> <small>(<span ng-bind="key"></span>)</small>
+      </div>
+    </div>
+  </div>
+</div>
