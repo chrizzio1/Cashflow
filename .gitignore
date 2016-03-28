@@ -5,3 +5,7 @@ coverage/
 .idea/
 .tmp/
 dist/
+
+*.iml
+/out/
+*.log
