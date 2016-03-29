@@ -49,6 +49,9 @@
       <form>
         <div class="modal-body">
           <p class="lead">Join <strong>{{gameModal.game.name}}</strong></p>
+          <ul class="lead">
+            <li ng-repeat="player in gameModal.game.players">{{player.name}}</li>
+          </ul>
           <div class="form-group">
             <input ng-model="gameModal.password" class="form-control" type="text" placeholder="Passwort">
           </div>

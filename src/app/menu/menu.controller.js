@@ -92,6 +92,7 @@
 
     vm.game = game;
     vm.password = '';
+    vm.cancel = cancel;
     vm.joinGame = joinGame;
 
     function cancel() {
