@@ -14,23 +14,18 @@
 
     // ######
 
+    var currentRound = 0;
+    var currentPlayer = 0;
     var gameCompleted = false;
+
     var players = [{
         name: 'Chris',
         cash: 200
       },
       { name: 'Hendrik' }
     ];
-    var currentPlayer = 0;
-
     var ratRace = cfActions.getActions();
-    console.log(ratRace)
 
-    var currentRound = 0;
-
-    function getCurrentRound() {
-      return currentRound;
-    }
 
     // Start game
     gameLoop();
@@ -54,7 +49,11 @@
         console.log(thisPlayer.name + " würfelt eine " + rolledDice);
 
         // 3. Execute the event on the new field
-        ratRace[thisPlayer.position].event(thisPlayer);
+        try {
+          ratRace[thisPlayer.position].event(thisPlayer);
+        } catch (err) {
+          //nothing
+        }
 
         console.log(thisPlayer.name + " landet auf " + ratRace[thisPlayer.position].type);
 
@@ -63,9 +62,6 @@
 
         // End of round
         nextPlayer();
-
-
-        // console.log(players[currentPlayer].name)
 
         currentRound++;
 
@@ -90,6 +86,10 @@
 
     function getRatrace() {
       return ratRace;
+    }
+
+    function getCurrentRound() {
+      return currentRound;
     }
 
   }

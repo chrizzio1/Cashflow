@@ -8,7 +8,6 @@
     var actions = [{
         'type': 'deal',
         event: function(player) {
-          console.log("abgecasht!");
           player.cash -= 100;
         }
       },
