@@ -6,46 +6,25 @@
     .controller('GameController', GameController);
 
   /** @ngInject */
-  function GameController() {
+  function GameController(cfActions) {
     var vm = this;
     vm.roll = roll;
     vm.getPlayers = getPlayers;
     vm.getCurrentRound = getCurrentRound;
 
-
     // ######
+
     var gameCompleted = false;
-    var players = [
-      { 'name': 'Chris' },
-      { 'name': 'Hendrik' }
+    var players = [{
+        name: 'Chris',
+        cash: 200
+      },
+      { name: 'Hendrik' }
     ];
     var currentPlayer = 0;
 
-    var ratRace = [{ 'type': 'deal' },
-      { 'type': 'charity' },
-      { 'type': 'deal' },
-      { 'type': 'payday' },
-      { 'type': 'deal' },
-      { 'type': 'event' },
-      { 'type': 'deal' },
-      { 'type': 'costs' },
-      { 'type': 'deal' },
-      { 'type': 'baby' },
-      { 'type': 'deal' },
-      { 'type': 'payday' },
-      { 'type': 'deal' },
-      { 'type': 'event' },
-      { 'type': 'deal' },
-      { 'type': 'cost' },
-      { 'type': 'deal' },
-      { 'type': 'debt' },
-      { 'type': 'deal' },
-      { 'type': 'payday' },
-      { 'type': 'deal' },
-      { 'type': 'event' },
-      { 'type': 'deal' },
-      { 'type': 'cost' }
-    ];
+    var ratRace = cfActions.getActions();
+    console.log(ratRace)
 
     var currentRound = 0;
 
@@ -74,7 +53,9 @@
         thisPlayer.position += rolledDice;
         console.log(thisPlayer.name + " würfelt eine " + rolledDice);
 
-        // 3. Execute the Event on the new field
+        // 3. Execute the event on the new field
+        ratRace[thisPlayer.position].event(thisPlayer);
+
         console.log(thisPlayer.name + " landet auf " + ratRace[thisPlayer.position].type);
 
         // 4. Financial actions
@@ -95,11 +76,7 @@
     }
 
     function nextPlayer() {
-      if (currentPlayer + 1 >= players.length) {
-        currentPlayer = 0;
-      } else {
-        currentPlayer++;
-      }
+      currentPlayer = ++currentPlayer % players.length
     }
 
     function roll() {
