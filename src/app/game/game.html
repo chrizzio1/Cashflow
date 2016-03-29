@@ -13,7 +13,7 @@
     <div ng-repeat="(key, player) in game.getPlayers()" class="player__card">
       <div class="player__card__avatar"></div>
       <div class="player__card__name">
-        <strong ng-bind="player.name"></strong> <small>(<span ng-bind="key"></span>)</small>
+        <strong ng-bind="player.name"></strong> <small>(<span ng-bind="player.cash"></span>)</small>
       </div>
     </div>
   </div>
