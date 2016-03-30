@@ -7,7 +7,7 @@
     "test": "gulp test",
     "predeploy": "gulp build",
     "postinstall": "bower install",
-    "deploy" : "firebase deploy"
+    "deploy": "firebase deploy"
   },
   "devDependencies": {
     "browser-sync": "~2.9.11",
