@@ -14,8 +14,14 @@
         controller: 'MainController',
         controllerAs: 'main'
       })
+      .state('menu', {
+        url: '/menu',
+        templateUrl: 'app/menu/menu.html',
+        controller: 'MenuController',
+        controllerAs: 'menu'
+      })
       .state('game', {
-        url: '/game',
+        url: '/game/:id',
         templateUrl: 'app/game/game.html',
         controller: 'GameController',
         controllerAs: 'game'

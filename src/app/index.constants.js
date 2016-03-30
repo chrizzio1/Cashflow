@@ -5,6 +5,6 @@
   angular
     .module('cashflow')
     .constant('malarkey', malarkey)
-    .constant('moment', moment);
-
+    .constant('moment', moment)
+    .constant('firebaseUrl', 'https://cash-up.firebaseio.com/');
 })();
