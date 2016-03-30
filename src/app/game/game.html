@@ -1,5 +1,4 @@
 <div class="container">
-  {{game.getCurrentRound()}}
   <div class="text-center">
     <h1>Game</h1>
     <p class="lead">
@@ -14,6 +13,12 @@
       <div class="player__card__avatar"></div>
       <div class="player__card__name">
         <strong ng-bind="player.name"></strong> <small>(<span ng-bind="player.cash"></span>)</small>
+      </div>
+    </div>
+    <h3>Aktionsverlauf</h3>
+    <div ng-repeat="(key, log) in game.getRoundLog()">
+      <div>
+        <samp ng-bind="log.content"></samp>
       </div>
     </div>
   </div>

@@ -10,6 +10,7 @@
     var vm = this;
     vm.roll = roll;
     vm.getPlayers = getPlayers;
+    vm.getRoundLog = getRoundLog;
     vm.getCurrentRound = getCurrentRound;
 
     // ######
@@ -17,6 +18,7 @@
     var currentRound = 0;
     var currentPlayer = 0;
     var gameCompleted = false;
+    var roundLog = [];
 
     var players = [{
         name: 'Chris',
@@ -46,7 +48,8 @@
           thisPlayer.position = 0;
         }
         thisPlayer.position += rolledDice;
-        console.log(thisPlayer.name + " würfelt eine " + rolledDice);
+
+
 
         // 3. Execute the event on the new field
         try {
@@ -55,7 +58,7 @@
           //nothing
         }
 
-        console.log(thisPlayer.name + " landet auf " + ratRace[thisPlayer.position].type);
+        roundLog.push({ content: currentRound + ": " + thisPlayer.name + " würfelt eine " + rolledDice+ " und landet auf " + ratRace[thisPlayer.position].type});
 
         // 4. Financial actions
         // todo
@@ -81,6 +84,10 @@
 
     function getPlayers() {
       return players;
+    }
+
+    function getRoundLog() {
+      return roundLog;
     }
 
 
