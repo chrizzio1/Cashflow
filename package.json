@@ -6,6 +6,7 @@
     "start": "gulp serve",
     "test": "gulp test",
     "predeploy": "gulp build",
+    "postinstall": "bower install",
     "deploy" : "firebase deploy"
   },
   "devDependencies": {
