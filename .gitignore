@@ -9,3 +9,5 @@ dist/
 *.iml
 /out/
 *.log
+
+npm-debug.log
