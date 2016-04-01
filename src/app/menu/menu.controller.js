@@ -8,11 +8,12 @@
     .controller('JoinGameModalController', JoinGameModalController);
 
   /** @ngInject */
-  function MenuController($uibModal, $firebaseArray, firebaseUrl) {
+  function MenuController($stateParams, $uibModal, $firebaseArray, firebaseUrl) {
     var vm = this;
 
     var ref = new Firebase(firebaseUrl + 'games');
     vm.games = $firebaseArray(ref);
+    vm.player = $stateParams.player;
     vm.openCreateGameModal = openCreateGameModal;
     vm.openJoinGameModal = openJoinGameModal;
 
@@ -25,8 +26,7 @@
         size: 'sm',
         resolve: {
           hostPlayer: function () {
-            // TODO: Player Object anlegen und laden
-            return {name: 'Hendrik'};
+            return vm.player;
           },
           games: function () {
             return vm.games;
@@ -41,7 +41,7 @@
       });
     }
 
-    function openJoinGameModal(game) {
+    function openJoinGameModal(game, player) {
       var modalInstance = $uibModal.open({
         animation: true,
         templateUrl: 'joinGameModal.html',
@@ -49,7 +49,8 @@
         controllerAs: 'gameModal',
         size: 'sm',
         resolve: {
-          game: game
+          game: game,
+          player: player
         }
       });
 

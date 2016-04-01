@@ -11,11 +11,11 @@
         <div class="flex-box flex-box--center">
           <form>
             <p class="lead">Verrat uns deinen Namen!</p>
-            <input class="form-control" type="text" ng-model="main.player" placeholder="Name">
+            <input class="form-control" type="text" ng-model="main.player.name" placeholder="Name">
             <br>
-            <button ng-class="{'rubberBand':main.player.length > 2}" type="submit" class="btn btn-lg btn-success"
-                    ui-sref="menu()"
-                    ng-disabled="main.player.length < 3">KATSCHING!
+            <button ng-class="{'rubberBand':main.player.name.length > 2}" type="submit" class="btn btn-lg btn-success"
+                    ui-sref="menu({player: main.player})"
+                    ng-disabled="main.player.name.length < 3">KATSCHING!
             </button>
           </form>
         </div>

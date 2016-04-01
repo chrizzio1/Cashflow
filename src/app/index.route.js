@@ -18,7 +18,10 @@
         url: '/menu',
         templateUrl: 'app/menu/menu.html',
         controller: 'MenuController',
-        controllerAs: 'menu'
+        controllerAs: 'menu',
+        params: {
+          player: {}
+        }
       })
       .state('game', {
         url: '/game/:id',

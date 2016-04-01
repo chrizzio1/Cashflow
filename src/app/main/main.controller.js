@@ -9,9 +9,9 @@
   function MainController() {
     var vm = this;
 
-    vm.player = '';
+    vm.player = {
+      name: ''
+    };
     vm.classAnimation = '';
-
-
   }
 })();
