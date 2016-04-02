@@ -66,29 +66,17 @@
         .then(nextPlayer);          // 5. Next player's turn
     }
 
-    function checkGameState() {
-      console.debug('check state');
+    function roll() {
+      console.debug('roll');
 
       var deferred = $q.defer();
 
-      vm.game.$save().then(deferred.resolve);
-      return deferred.promise;
-    }
+      console.debug(vm.game);
+      var max = 6;
+      var min = 1;
 
-    function executeFieldAction() {
-      console.debug('field action');
-
-      var deferred = $q.defer();
-
-      vm.game.$save().then(deferred.resolve);
-      return deferred.promise;
-    }
-
-    function financialStatement() {
-      console.debug('financial statement');
-
-      var deferred = $q.defer();
-
+      vm.game.rolled = Math.floor(Math.random() * (max - min + 1) + min);
+      //vm.game.rolled = Math.ceil(Math.random() * 6);
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
     }
@@ -105,6 +93,33 @@
       return deferred.promise;
     }
 
+    function executeFieldAction() {
+      console.debug('field action');
+
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
+    }
+
+    function checkGameState() {
+      console.debug('check state');
+
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
+    }
+
+    function financialStatement() {
+      console.debug('financial statement');
+
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
+    }
+
     function nextPlayer() {
       console.debug('next player');
 
@@ -113,17 +128,6 @@
       vm.game.currentPlayerIdx = ++vm.game.currentPlayerIdx % vm.game.players.length;
       console.debug('current player:');
       console.debug(vm.game.players[vm.game.currentPlayerIdx]);
-      vm.game.$save().then(deferred.resolve);
-      return deferred.promise;
-    }
-
-    function roll() {
-      console.debug('roll');
-
-      var deferred = $q.defer();
-
-      console.debug(vm.game);
-      vm.game.rolled = Math.ceil(Math.random() * 6);
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
     }
