@@ -14,8 +14,9 @@
             <input class="form-control" type="text" ng-model="main.player.name" placeholder="Name">
             <br>
             <button ng-class="{'rubberBand':main.player.name.length > 2}" type="submit" class="btn btn-lg btn-success"
-                    ui-sref="menu({player: main.player})"
-                    ng-disabled="main.player.name.length < 3">KATSCHING!
+                    ng-disabled="main.player.name.length < 3"
+                    ng-click="main.katsching()">
+              KATSCHING!
             </button>
           </form>
         </div>

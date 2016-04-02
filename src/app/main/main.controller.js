@@ -6,12 +6,15 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController() {
+  function MainController($state, $localStorage) {
     var vm = this;
 
-    vm.player = {
-      name: ''
-    };
-    vm.classAnimation = '';
+    vm.player = $localStorage.player ? $localStorage.player : {name: ''};
+    vm.katsching = katsching;
+
+    function katsching() {
+      $localStorage.player = vm.player;
+      $state.go('menu');
+    }
   }
 })();
