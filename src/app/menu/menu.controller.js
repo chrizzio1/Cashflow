@@ -91,6 +91,7 @@
   /** @ngInject */
   function JoinGameModalController(game, $state, $uibModalInstance, $localStorage) {
     var vm = this;
+
     vm.password = '';
     vm.game = game;
     vm.cancel = cancel;
@@ -112,6 +113,8 @@
           })) {
 
           vm.game.players.push($localStorage.player);
+          console.log('Added new player');
+          console.log(vm.game);
         }
 
         vm.game.$save().then(function (ref) {
