@@ -104,7 +104,16 @@
     function joinGame() {
       if (vm.game.password === vm.password) {
         console.log('Joining Game: %s', vm.game.$id);
-        vm.game.players.push($localStorage.player);
+
+        // Checks if a player with same name isn't already in game
+        var name = $localStorage.player.name;
+        if (vm.game.players.every(function (player) {
+            return player.name !== name;
+          })) {
+
+          vm.game.players.push($localStorage.player);
+        }
+
         vm.game.$save().then(function (ref) {
           $uibModalInstance.close();
           $state.go('game', {game: vm.game});
