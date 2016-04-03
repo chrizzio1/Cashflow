@@ -5,17 +5,17 @@
       Lets go
     </p>
     <p>
-    <button ng-show="game.game.currentPlayer.name === game.localPlayer.name" class="btn btn-primary" ng-click="game.makeTurn()">Roll</button>
+    <button ng-if="game.game.players[game.game.currentPlayerIdx].name === game.localPlayer.name" class="btn btn-primary" ng-click="game.makeTurn()">Roll</button>
     {{game.game.rolled}}
-    <button ng-show="game.game.currentPlayerIdx === -1" ng-click="game.beginGame()" class="btn btn-success">Start Game</button>
+    <button ng-if="game.game.currentPlayerIdx === -1" ng-click="game.beginGame()" class="btn btn-success">Start Game</button>
   </div>
   <div class="col-xs-12">
     <h3>Players</h3>
     <div ng-repeat="(key, player) in game.game.players" class="player__card">
       <div class="player__card__avatar"></div>
       <div class="player__card__name">
-        <strong ng-show="player.name === game.game.currentPlayer.name">{{player.name}} ({{player.cash}})</strong>
-        <small ng-show="player.name !== game.game.currentPlayer.name">{{player.name}} ({{player.cash}})</small>
+        <strong ng-if="player.name === game.game.players[game.game.currentPlayerIdx].name">{{player.name}} ({{player.cash}})</strong>
+        <small ng-if="player.name !== game.game.players[game.game.currentPlayerIdx].name">{{player.name}} ({{player.cash}})</small>
       </div>
     </div>
     <h3>Spielverlauf</h3>

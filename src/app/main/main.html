@@ -11,7 +11,7 @@
         <div class="flex-box flex-box--center">
           <form>
             <p class="lead">Verrat uns deinen Namen!</p>
-            <input class="form-control" type="text" ng-model="main.player.name" placeholder="Name">
+            <input class="form-control" type="text" ng-model="main.player.name" placeholder="Name" autofocus>
             <br>
             <button ng-class="{'rubberBand':main.player.name.length > 2}" type="submit" class="btn btn-lg btn-success"
                     ng-disabled="main.player.name.length < 3"
