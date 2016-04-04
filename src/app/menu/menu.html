@@ -11,7 +11,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr style="cursor: pointer" ng-repeat="game in menu.games" ng-click="menu.openJoinGameModal(game)">
+      <tr style="cursor: pointer" ng-repeat="game in menu.games | filter: {status: 'initialized'}" ng-click="menu.openJoinGameModal(game)">
         <td>{{game.name}}</td>
         <td>{{game.hostName}}</td>
         <td>{{game.players.length}}</td>
