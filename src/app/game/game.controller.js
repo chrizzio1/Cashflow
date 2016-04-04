@@ -53,7 +53,6 @@
     function beginGame() {
       if (vm.game.currentPlayerIdx === -1) {
         vm.game.roundLog.push({ content: 'Das Spiel beginnt' });
-        vm.game.roundLog.push({content: 'Das Spiel beginnt'});
         vm.game.status = 'started';
         nextPlayer();
       }
