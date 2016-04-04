@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -6,98 +6,130 @@
     .controller('GameController', GameController);
 
   /** @ngInject */
-  function GameController(cfActions) {
+  function GameController($q, $stateParams, $localStorage, cfActions) {
     var vm = this;
-    vm.roll = roll;
-    vm.getPlayers = getPlayers;
-    vm.getRoundLog = getRoundLog;
-    vm.getCurrentRound = getCurrentRound;
 
-    // ######
-
-    var currentRound = 0;
-    var currentPlayer = 0;
-    var gameCompleted = false;
-    var roundLog = [];
-
-    var players = [{
-        name: 'Chris',
-        cash: 200
-      },
-      { name: 'Hendrik' }
-    ];
     var ratRace = cfActions.getActions();
 
+    vm.localPlayer = $localStorage.player;
 
-    // Start game
-    gameLoop();
+    console.log('load game...');
+    vm.game = $stateParams.game;
+    vm.game.$loaded().then(function () {
+      console.log('game loaded');
 
-    function gameLoop() {
+      initGame();
+      initPlayer();
 
-      while (!gameCompleted) {
-        // TODO
+      vm.game.$save().then(function () {
+        vm.beginGame = beginGame;
+        vm.makeTurn = makeTurn;
+      });
+    });
 
-        var thisPlayer = players[currentPlayer];
-        // Runde
-
-        // 1. rolle the die
-        var rolledDice = roll();
-
-        // 2. Set player to new position
-        if (thisPlayer.position === undefined) {
-          thisPlayer.position = 0;
-        }
-        thisPlayer.position += rolledDice;
-
-
-
-        // 3. Execute the event on the new field
-        try {
-          ratRace[thisPlayer.position].event(thisPlayer);
-        } catch (err) {
-          //nothing
-        }
-
-        roundLog.push({ content: currentRound + ": " + thisPlayer.name + " würfelt eine " + rolledDice+ " und landet auf " + ratRace[thisPlayer.position].type});
-
-        // 4. Financial actions
-        // todo
-
-        // End of round
-        nextPlayer();
-
-        currentRound++;
-
-        if (currentRound == 10) {
-          gameCompleted = true;
-        }
+    function initGame() {
+      console.debug('init game');
+      if (vm.game.status !== 'initiated') {
+        vm.game.currentPlayerIdx = -1;
+        vm.game.rolled = 0;
+        vm.game.roundLog = [{content: 'Die Spieler versammeln sich zum abcashen'}];
+        vm.game.status = 'initiated';
       }
     }
 
-    function nextPlayer() {
-      currentPlayer = ++currentPlayer % players.length
+    function initPlayer() {
+      console.debug('init player');
+
+      vm.game.players.find(function (player, idx) {
+        if (player.name === vm.localPlayer.name && player.status !== 'initialized') {
+          vm.game.players[idx].position = 0;
+          vm.game.players[idx].cash = 300;
+          player.status = 'initialized'
+        }
+      })
+    }
+
+    function beginGame() {
+      if (vm.game.currentPlayerIdx === -1) {
+        vm.game.roundLog.push({content: 'Das Spiel beginnt'});
+        nextPlayer();
+      }
+    }
+
+    function makeTurn() {
+      //TODO: Semaphore to avoid parallel execution
+      roll()                        // 1. Roll the dice
+        .then(movePlayer)           // 2. Move player to new position
+        .then(executeFieldAction)   // 3. Execute the event on the new field
+        .then(checkGameState)       // 4. Check if a player wins
+        .then(financialStatement)   // 4. Financial actions
+        .then(nextPlayer);          // 5. Next player's turn
     }
 
     function roll() {
-      return Math.round(Math.random() * (6 - 1) + 1);
+      console.debug('roll');
+
+      var deferred = $q.defer();
+
+      console.debug(vm.game);
+      var max = 6;
+      var min = 1;
+
+      vm.game.rolled = Math.floor(Math.random() * (max - min + 1) + min);
+      //vm.game.rolled = Math.ceil(Math.random() * 6);
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
     }
 
-    function getPlayers() {
-      return players;
+    function movePlayer() {
+      console.debug('move player');
+
+      var deferred = $q.defer();
+
+      var log = vm.game.players[vm.game.currentPlayerIdx].name + ' würfelt eine ' + vm.game.rolled + ' und rückt von ' + vm.game.players[vm.game.currentPlayerIdx].position + ' auf ' + (vm.game.players[vm.game.currentPlayerIdx].position + vm.game.rolled) % ratRace.length;
+      vm.game.roundLog.push({content: log});
+      vm.game.players[vm.game.currentPlayerIdx].position = (vm.game.players[vm.game.currentPlayerIdx].position + vm.game.rolled) % ratRace.length;
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
     }
 
-    function getRoundLog() {
-      return roundLog;
+    function executeFieldAction() {
+      console.debug('field action');
+
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
     }
 
+    function checkGameState() {
+      console.debug('check state');
 
-    function getRatrace() {
-      return ratRace;
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
     }
 
-    function getCurrentRound() {
-      return currentRound;
+    function financialStatement() {
+      console.debug('financial statement');
+
+      var deferred = $q.defer();
+
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
     }
 
+    function nextPlayer() {
+      console.debug('next player');
+
+      var deferred = $q.defer();
+
+      vm.game.currentPlayerIdx = ++vm.game.currentPlayerIdx % vm.game.players.length;
+      console.debug('current player:');
+      console.debug(vm.game.players[vm.game.currentPlayerIdx]);
+      vm.game.$save().then(deferred.resolve);
+      return deferred.promise;
+    }
   }
 })();

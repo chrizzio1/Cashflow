@@ -8,11 +8,12 @@
     .controller('JoinGameModalController', JoinGameModalController);
 
   /** @ngInject */
-  function MenuController($uibModal, $firebaseArray, firebaseUrl) {
+  function MenuController($uibModal, $firebaseArray, $firebaseObject, firebaseUrl) {
     var vm = this;
 
     var ref = new Firebase(firebaseUrl + 'games');
     vm.games = $firebaseArray(ref);
+    //vm.player = $stateParams.player;
     vm.openCreateGameModal = openCreateGameModal;
     vm.openJoinGameModal = openJoinGameModal;
 
@@ -24,10 +25,6 @@
         controllerAs: 'gameModal',
         size: 'sm',
         resolve: {
-          hostPlayer: function () {
-            // TODO: Player Object anlegen und laden
-            return {name: 'Hendrik'};
-          },
           games: function () {
             return vm.games;
           }
@@ -49,7 +46,9 @@
         controllerAs: 'gameModal',
         size: 'sm',
         resolve: {
-          game: game
+          game: function () {
+            return $firebaseObject(ref.child(game.$id));
+          }
         }
       });
 
@@ -62,14 +61,14 @@
   }
 
   /** @ngInject */
-  function CreateGameModalController($uibModalInstance, games, hostPlayer) {
+  function CreateGameModalController(games, $state, $uibModalInstance, $localStorage, $firebaseObject) {
     var vm = this;
 
     vm.newGame = {
       name: '',
       password: '',
-      hostName: hostPlayer.name,
-      players: [hostPlayer]
+      hostName: $localStorage.player.name,
+      players: [$localStorage.player]
     };
     vm.cancel = cancel;
     vm.createGame = createGame;
@@ -80,18 +79,21 @@
     }
 
     function createGame() {
-      games.$add(vm.newGame);
-      console.log('Created new game: %s', vm.newGame);
-      $uibModalInstance.close();
+      games.$add(vm.newGame).then(function (ref) {
+        console.log(ref.key());
+        console.log('Created new game: %s', vm.newGame.name);
+        $uibModalInstance.close();
+        $state.go('game', {game: $firebaseObject(ref)});
+      });
     }
   }
 
   /** @ngInject */
-  function JoinGameModalController($state, $uibModalInstance, game) {
+  function JoinGameModalController(game, $state, $uibModalInstance, $localStorage) {
     var vm = this;
 
-    vm.game = game;
     vm.password = '';
+    vm.game = game;
     vm.cancel = cancel;
     vm.joinGame = joinGame;
 
@@ -101,10 +103,24 @@
     }
 
     function joinGame() {
-      if (game.password === vm.password) {
-        console.log('Joining Game: %s', game.$id);
-        $uibModalInstance.close();
-        $state.go('game', {id: game.$id});
+      if (vm.game.password === vm.password) {
+        console.log('Joining Game: %s', vm.game.$id);
+
+        // Checks if a player with same name isn't already in game
+        var name = $localStorage.player.name;
+        if (vm.game.players.every(function (player) {
+            return player.name !== name;
+          })) {
+
+          vm.game.players.push($localStorage.player);
+          console.log('Added new player');
+          console.log(vm.game);
+        }
+
+        vm.game.$save().then(function (ref) {
+          $uibModalInstance.close();
+          $state.go('game', {game: vm.game});
+        });
       } else {
         console.error('Wrong password! Try again');
       }

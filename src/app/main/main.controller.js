@@ -1,4 +1,4 @@
-(function() {
+(function () {
   'use strict';
 
   angular
@@ -6,18 +6,15 @@
     .controller('MainController', MainController);
 
   /** @ngInject */
-  function MainController($timeout) {
+  function MainController($state, $localStorage) {
     var vm = this;
 
-    vm.classAnimation = '';
+    vm.player = $localStorage.player ? $localStorage.player : {name: ''};
+    vm.katsching = katsching;
 
-    activate();
-
-    function activate() {
-      $timeout(function() {
-        vm.classAnimation = 'rubberBand';
-      }, 4000);
+    function katsching() {
+      $localStorage.player = vm.player;
+      $state.go('menu');
     }
-
   }
 })();

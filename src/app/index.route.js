@@ -21,10 +21,13 @@
         controllerAs: 'menu'
       })
       .state('game', {
-        url: '/game/:id',
+        url: '/game',
         templateUrl: 'app/game/game.html',
         controller: 'GameController',
-        controllerAs: 'game'
+        controllerAs: 'game',
+        params: {
+          game: {}
+        }
       });
 
     $urlRouterProvider.otherwise('/');

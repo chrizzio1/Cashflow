@@ -4,7 +4,23 @@
     <p class="lead">
       Bock auf 'ne Runde <strong>abcashen</strong>?
     </p>
-    
-    <button type="button" class="btn btn-lg btn-success rubberBand" ui-sref="menu()">KATSCHING!</button>
+
+
+    <div class="row">
+      <div class="container">
+        <div class="flex-box flex-box--center">
+          <form>
+            <p class="lead">Verrat uns deinen Namen!</p>
+            <input class="form-control" type="text" ng-model="main.player.name" placeholder="Name" autofocus>
+            <br>
+            <button ng-class="{'rubberBand':main.player.name.length > 2}" type="submit" class="btn btn-lg btn-success"
+                    ng-disabled="main.player.name.length < 3"
+                    ng-click="main.katsching()">
+              KATSCHING!
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

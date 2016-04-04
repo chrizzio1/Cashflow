@@ -4,19 +4,22 @@
     <p class="lead">
       Lets go
     </p>
-    <button class="btn btn-primary" ng-click="lastRoll = game.roll()">Roll</button>
-    {{lastRoll}}
+    <p>
+    <button ng-if="game.game.players[game.game.currentPlayerIdx].name === game.localPlayer.name" class="btn btn-primary" ng-click="game.makeTurn()">Roll</button>
+    {{game.game.rolled}}
+    <button ng-if="game.game.currentPlayerIdx === -1" ng-click="game.beginGame()" class="btn btn-success">Start Game</button>
   </div>
   <div class="col-xs-12">
     <h3>Players</h3>
-    <div ng-repeat="(key, player) in game.getPlayers()" class="player__card">
+    <div ng-repeat="(key, player) in game.game.players" class="player__card">
       <div class="player__card__avatar"></div>
       <div class="player__card__name">
-        <strong ng-bind="player.name"></strong> <small>(<span ng-bind="player.cash"></span>)</small>
+        <strong ng-if="player.name === game.game.players[game.game.currentPlayerIdx].name">{{player.name}} ({{player.cash}})</strong>
+        <small ng-if="player.name !== game.game.players[game.game.currentPlayerIdx].name">{{player.name}} ({{player.cash}})</small>
       </div>
     </div>
-    <h3>Aktionsverlauf</h3>
-    <div ng-repeat="(key, log) in game.getRoundLog()">
+    <h3>Spielverlauf</h3>
+    <div ng-repeat="(key, log) in game.game.roundLog">
       <div>
         <samp ng-bind="log.content"></samp>
       </div>
