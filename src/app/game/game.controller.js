@@ -10,6 +10,7 @@
     var vm = this;
 
     var ratRace = cfActions.getActions();
+    var audioKatsching = new Audio('/assets/sounds/katsching.mp3');
 
     vm.localPlayer = $localStorage.player;
 
@@ -32,7 +33,7 @@
       if (vm.game.status !== 'initiated') {
         vm.game.currentPlayerIdx = -1;
         vm.game.rolled = 0;
-        vm.game.roundLog = [{content: 'Die Spieler versammeln sich zum abcashen'}];
+        vm.game.roundLog = [{ content: 'Die Spieler versammeln sich zum abcashen' }];
         vm.game.status = 'initialized';
       }
     }
@@ -51,6 +52,7 @@
 
     function beginGame() {
       if (vm.game.currentPlayerIdx === -1) {
+        vm.game.roundLog.push({ content: 'Das Spiel beginnt' });
         vm.game.roundLog.push({content: 'Das Spiel beginnt'});
         vm.game.status = 'started';
         nextPlayer();
@@ -88,7 +90,7 @@
       var deferred = $q.defer();
 
       var log = vm.game.players[vm.game.currentPlayerIdx].name + ' würfelt eine ' + vm.game.rolled + ' und rückt von ' + vm.game.players[vm.game.currentPlayerIdx].position + ' auf ' + (vm.game.players[vm.game.currentPlayerIdx].position + vm.game.rolled) % ratRace.length;
-      vm.game.roundLog.push({content: log});
+      vm.game.roundLog.push({ content: log });
       vm.game.players[vm.game.currentPlayerIdx].position = (vm.game.players[vm.game.currentPlayerIdx].position + vm.game.rolled) % ratRace.length;
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
@@ -98,7 +100,19 @@
       console.debug('field action');
 
       var deferred = $q.defer();
+      var currentPlayer = vm.game.players[vm.game.currentPlayerIdx];
+      var cash = ratRace[currentPlayer.position].event();
 
+      currentPlayer.cash += cash;
+
+
+      if (cash > 0) {
+        var log = currentPlayer.name + ' casht ab: +' + cash + ' €!';
+        audioKatsching.play();
+      } else {
+        var log = currentPlayer.name + ' verliert ' + cash + ' €. LAPPEN!';
+      }
+      vm.game.roundLog.push({ content: log });
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
     }
