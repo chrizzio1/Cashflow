@@ -99,19 +99,8 @@
       console.debug('field action');
 
       var deferred = $q.defer();
-      var currentPlayer = vm.game.players[vm.game.currentPlayerIdx];
-      var cash = ratRace[currentPlayer.position].event();
+      ratRace[vm.game.players[vm.game.currentPlayerIdx].position].event(vm.game);
 
-      currentPlayer.cash += cash;
-
-
-      if (cash > 0) {
-        var log = currentPlayer.name + ' casht ab: +' + cash + ' €!';
-        audioKatsching.play();
-      } else {
-        var log = currentPlayer.name + ' verliert ' + cash + ' €. LAPPEN!';
-      }
-      vm.game.roundLog.push({ content: log });
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
     }
