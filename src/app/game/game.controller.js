@@ -33,7 +33,7 @@
         vm.game.currentPlayerIdx = -1;
         vm.game.rolled = 0;
         vm.game.roundLog = [{content: 'Die Spieler versammeln sich zum abcashen'}];
-        vm.game.status = 'initiated';
+        vm.game.status = 'initialized';
       }
     }
 
@@ -52,6 +52,7 @@
     function beginGame() {
       if (vm.game.currentPlayerIdx === -1) {
         vm.game.roundLog.push({content: 'Das Spiel beginnt'});
+        vm.game.status = 'started';
         nextPlayer();
       }
     }
