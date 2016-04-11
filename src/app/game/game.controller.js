@@ -6,10 +6,10 @@
     .controller('GameController', GameController);
 
   /** @ngInject */
-  function GameController($q, $stateParams, $localStorage, cfActions) {
+  function GameController($q, $stateParams, $localStorage, cfActionsService) {
     var vm = this;
 
-    var ratRace = cfActions.getActions();
+    var ratRace = cfActionsService.getActions();
     var audioKatsching = new Audio('/assets/sounds/katsching.mp3');
 
     vm.localPlayer = $localStorage.player;
@@ -53,7 +53,6 @@
     function beginGame() {
       if (vm.game.currentPlayerIdx === -1) {
         vm.game.roundLog.push({ content: 'Das Spiel beginnt' });
-        vm.game.roundLog.push({content: 'Das Spiel beginnt'});
         vm.game.status = 'started';
         nextPlayer();
       }
@@ -100,19 +99,8 @@
       console.debug('field action');
 
       var deferred = $q.defer();
-      var currentPlayer = vm.game.players[vm.game.currentPlayerIdx];
-      var cash = ratRace[currentPlayer.position].event();
+      ratRace[vm.game.players[vm.game.currentPlayerIdx].position].event(vm.game);
 
-      currentPlayer.cash += cash;
-
-
-      if (cash > 0) {
-        var log = currentPlayer.name + ' casht ab: +' + cash + ' €!';
-        audioKatsching.play();
-      } else {
-        var log = currentPlayer.name + ' verliert ' + cash + ' €. LAPPEN!';
-      }
-      vm.game.roundLog.push({ content: log });
       vm.game.$save().then(deferred.resolve);
       return deferred.promise;
     }
