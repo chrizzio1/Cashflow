@@ -6,10 +6,10 @@
     .controller('GameController', GameController);
 
   /** @ngInject */
-  function GameController($q, $stateParams, $localStorage, cfActions) {
+  function GameController($q, $stateParams, $localStorage, cfActionsService) {
     var vm = this;
 
-    var ratRace = cfActions.getActions();
+    var ratRace = cfActionsService.getActions();
     var audioKatsching = new Audio('/assets/sounds/katsching.mp3');
 
     vm.localPlayer = $localStorage.player;
